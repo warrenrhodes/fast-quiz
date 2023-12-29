@@ -1,4 +1,4 @@
-import { HomeUi } from '@fast-quiz/pages-component';
+import { Preview } from '@fast-quiz/pages-component';
 
 export default async function Index() {
   /*
@@ -8,7 +8,7 @@ export default async function Index() {
    */
   return (
     <div className="">
-      <HomeUi />
+      <Preview />
     </div>
   );
 }
