@@ -1,0 +1,21 @@
+services:
+  db:
+    container_name: db
+    image: postgres:latest
+    restart: unless-stopped
+    cpu_count: 1
+    cpus: 0.50
+    mem_limit: 100M
+    mem_reservation: 10M
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 127.0.0.1:5432:5432
+
+volumes:
+  pgdata:
+    driver: local

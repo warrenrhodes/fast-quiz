@@ -17,7 +17,8 @@
     "paths": {
       "@fast-quiz/assets": ["libs/assets/src/index.ts"],
       "@fast-quiz/models": ["libs/models/src/index.ts"],
-      "@fast-quiz/pages-component": ["libs/pages-component/src/index.ts"]
+      "@fast-quiz/pages-component": ["libs/pages-component/src/index.ts"],
+      "@fast-quiz/utils": ["libs/utils/src/index.ts"]
     }
   },
   "exclude": [

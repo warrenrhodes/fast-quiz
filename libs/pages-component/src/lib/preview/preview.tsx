@@ -1,8 +1,8 @@
 'use client';
 import { IQuizGroup } from '@fast-quiz/models';
-import Answer from '../answer/answer';
 import { LocalStorageKeys } from '../utils/constants';
 import { useState, useEffect } from 'react';
+import AnswerTo from '../answer-to/answer-to';
 
 /* eslint-disable-next-line */
 export interface PreviewProps {}
@@ -28,7 +28,7 @@ export function Preview() {
 
   return (
     <div className="">
-      <Answer isPreview={true} quizGroup={data} />
+      <AnswerTo isPreview={true} quizGroup={data} />
     </div>
   );
 }
