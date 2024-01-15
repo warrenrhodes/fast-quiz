@@ -1,13 +1,9 @@
-'use client';
 import { IQuizGroup } from '@fast-quiz/models';
 import { LocalStorageKeys } from '../utils/constants';
 import { useState, useEffect } from 'react';
 import AnswerTo from '../answer-to/answer-to';
 
-/* eslint-disable-next-line */
-export interface PreviewProps {}
-
-export function Preview() {
+export const Preview = () => {
   const [data, setData] = useState<IQuizGroup | null>(null);
 
   useEffect(() => {
@@ -31,6 +27,4 @@ export function Preview() {
       <AnswerTo isPreview={true} quizGroup={data} />
     </div>
   );
-}
-
-export default Preview;
+};

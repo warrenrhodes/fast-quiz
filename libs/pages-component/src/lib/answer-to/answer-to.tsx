@@ -1,5 +1,3 @@
-'use client';
-
 import {
   IAnswer,
   IQuiz,
@@ -77,7 +75,7 @@ export function AnswerTo(props: AnswerToProps) {
     for (const quiz of props.quizGroup.questions) {
       if (
         !userAnswers.find(
-          (q) => q.questionId === quiz.id && q.answers.length !== 0
+          (q) => q.quiz_id === quiz.id && q.answers.length !== 0
         )
       ) {
         displayMessage(
@@ -133,7 +131,7 @@ export function AnswerTo(props: AnswerToProps) {
           {!props.isPreview && goToResponseStat && (
             <div className="flex justify-end">
               <Link href={`/result/${props.quizGroup.id}`}>
-                <button className="btn btn-outline bg-green-600">Result</button>
+                <button className="btn btn-success">Result</button>
               </Link>
             </div>
           )}
@@ -149,6 +147,7 @@ const SingleQuiz = (props: {
   userAnswers: IResponse[];
   quizGroupId: string;
 }) => {
+  console.log(props.userAnswers);
   return (
     <div className="carousel-item flex flex-col items-start w-full justify-start">
       <div className="text-5xl font-semibold mb-9 font-serif">
@@ -180,25 +179,28 @@ const RadioAnswer = (props: {
 }) => {
   const [value, setValue] = useState<IAnswer | null>(null);
   const updateRadioQuizAnswer = (a: IAnswer) => {
-    const userAnswer = props.userAnswers.find(
-      (u) => u.questionId === props.quizId
+    const newUserAnswer: IResponse[] = props.userAnswers.filter((u) => {
+      if (u.quiz_id === props.quizId && u.answers[0] !== a.answer) {
+        u.answers = [a.answer];
+        u.id = uuidv4();
+        return u;
+      }
+      return u;
+    });
+    props.setUserAnswers(
+      newUserAnswer.find((e) => e.quiz_id === props.quizId)
+        ? [...newUserAnswer]
+        : [
+            ...props.userAnswers,
+            {
+              id: uuidv4(),
+              quiz_id: props.quizId,
+              created_at: new Date().toISOString(),
+              answers: [a.answer],
+              quiz_group_id: props.quizGroupId,
+            },
+          ]
     );
-    props.setUserAnswers([
-      ...props.userAnswers,
-      !userAnswer
-        ? {
-            id: uuidv4(),
-            questionId: props.quizId,
-            createdAt: new Date().toISOString(),
-            answers: a.answer,
-            groupId: props.quizGroupId,
-          }
-        : {
-            ...userAnswer,
-            answers: a.answer,
-            createdAt: new Date().toISOString(),
-          },
-    ]);
   };
   return (
     <div className="grid grid-cols-2 self-start justify-self-start gap-10">

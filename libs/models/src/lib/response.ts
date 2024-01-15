@@ -3,17 +3,17 @@
  */
 export enum IResponseKey {
   id = 'id',
-  questionId = 'questionId',
+  questionId = 'quiz_group_id',
   answers = 'answers',
-  createdAt = 'createdAt',
-  groupId = 'groupId',
+  createdAt = 'created_at',
+  groupId = 'quiz_id',
 }
 /**
  * The quiz interface definition.
  */
 export interface IResponse {
   [IResponseKey.id]: string;
-  [IResponseKey.answers]: string[] | string;
+  [IResponseKey.answers]: string[];
   [IResponseKey.questionId]: string;
   [IResponseKey.createdAt]: string;
   [IResponseKey.groupId]: string;

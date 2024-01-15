@@ -36,7 +36,7 @@ export async function dbConnect() {
 
     if (!isQuizzesExist) {
       await client.query(
-        'CREATE TABLE quizzes ( id UUID PRIMARY KEY,title VARCHAR(255), question_type VARCHAR(255), created_at TIMESTAMP, quiz_group_id UUID REFERENCES quiz_groups(id) ON DELETE CASCADE );'
+        'CREATE TABLE quizzes ( id UUID PRIMARY KEY, title VARCHAR(255), question_type VARCHAR(255), created_at TIMESTAMP, quiz_group_id UUID REFERENCES quiz_groups(id) ON DELETE CASCADE );'
       );
     }
 
@@ -48,7 +48,7 @@ export async function dbConnect() {
 
     if (!isAnswersExist) {
       await client.query(
-        'CREATE TABLE answers ( id UUID PRIMARY KEY, answer text, quiz_id UUID REFERENCES quizzes(id) ON DELETE CASCADE );'
+        'CREATE TABLE answers ( id UUID PRIMARY KEY, answer text, quiz_id UUID REFERENCES quizzes(id) ON DELETE CASCADE, created_at TIMESTAMP);'
       );
     }
 
@@ -60,7 +60,7 @@ export async function dbConnect() {
 
     if (!isResultExist) {
       await client.query(
-        'CREATE TABLE results ( id UUID PRIMARY KEY, answers text[], questionId UUID REFERENCES quizzes(id) ON DELETE CASCADE, groupId UUID REFERENCES quiz_groups(id) ON DELETE CASCADE, createdAt TIMESTAMP );'
+        'CREATE TABLE results ( id UUID PRIMARY KEY, answers text[], quiz_id UUID REFERENCES quizzes(id) ON DELETE CASCADE, quiz_group_id UUID REFERENCES quiz_groups(id) ON DELETE CASCADE, created_at TIMESTAMP );'
       );
     }
   } catch (e) {
