@@ -1,15 +1,15 @@
-import { Answer } from '@fast-quiz/pages-component';
+import { QuizResult } from '@fast-quiz/pages-component';
 
 export default async function Index({ params }: { params: { id: string } }) {
   const currentQuiz = await fetch(
-    `http://localhost:4200/api/result?quiz-id=${params.id}`
+    `http://localhost:4200/api/result?quiz-group-id=${params.id}`,
+    { cache: 'no-store' }
   );
-
-  const data = await currentQuiz.json();
 
   if (currentQuiz.status !== 200) {
     return <div>Fail to get the quiz</div>;
   }
+  const data = await currentQuiz.json();
 
   /*
    * Replace the elements below with your own.
@@ -18,7 +18,7 @@ export default async function Index({ params }: { params: { id: string } }) {
    */
   return (
     <div className="">
-      <Answer quizGroup={data} />
+      <QuizResult result={data} />
     </div>
   );
 }

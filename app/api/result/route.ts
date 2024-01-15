@@ -1,8 +1,10 @@
 import { NextRequest } from 'next/server';
-import { DB_CRUD } from '../../database/src/lib/db_crud';
+import { DB_CRUD } from '../../database/src';
 
 export async function GET(req: NextRequest) {
-  const quizID = req.nextUrl.searchParams.get('quiz-id');
+  const quizID = req.nextUrl.searchParams.get('quiz-group-id');
+  console.info(`retrieve the quiz group with id ${quizID}`);
+
   if (!quizID) {
     return new Response('Fails to get the result of quiz with undefined ID', {
       status: 500,

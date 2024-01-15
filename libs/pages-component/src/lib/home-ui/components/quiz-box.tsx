@@ -227,7 +227,7 @@ const QuizBox = () => {
               <div className="card-actions w-full">
                 <button
                   className="btn btn-primary w-full"
-                  onClick={() => setDisplayQuizTypeBox(!displayQuizTypeBox)}
+                  onClick={() => addNewQuiz(questionType.checkBox)}
                 >
                   <span>&#43;</span> Add Question
                 </button>

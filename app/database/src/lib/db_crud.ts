@@ -26,8 +26,8 @@ export abstract class DB_CRUD {
         for (const currentAnswer of answers) {
           const { id, answer: answer } = currentAnswer;
           await dbPool.query(
-            'INSERT INTO answers (id, answer, quiz_id) VALUES ($1, $2, $3)',
-            [id, answer, quiz_id]
+            'INSERT INTO answers (id, answer, quiz_id, created_at) VALUES ($1, $2, $3, $4)',
+            [id, answer, quiz_id, createdAt]
           );
         }
       }
@@ -39,7 +39,9 @@ export abstract class DB_CRUD {
     }
   };
 
-  static getQuiz = async (quizID: string): Promise<IQuizGroup | undefined> => {
+  static getQuizByGroup = async (
+    quizID: string
+  ): Promise<IQuizGroup | undefined> => {
     try {
       let queryGroup: IQuizGroup = {
         id: quizID,
@@ -85,7 +87,22 @@ export abstract class DB_CRUD {
       );
       return queryGroup;
     } catch (error) {
-      console.log(error);
+      console.log('fail to get quiz' + error);
+      return;
+    }
+  };
+
+  static getQuiz = async (quizID: string): Promise<IQuizGroup | undefined> => {
+    try {
+      const result = await dbPool.query('SELECT * FROM quizzes WHERE id = $1', [
+        quizID,
+      ]);
+      console.log(
+        `quiz retrieve successfully with data: ${JSON.stringify(result.rows)}`
+      );
+      return result.rows[0];
+    } catch (error) {
+      console.log('fail to get quiz' + error);
       return;
     }
   };
@@ -93,34 +110,65 @@ export abstract class DB_CRUD {
   static answerToQuiz = async (answer: IResponse[]): Promise<boolean> => {
     try {
       for (const currentAnswer of answer) {
+        console.log(currentAnswer);
         await dbPool.query(
-          'INSERT INTO answers (id, questionId, answers, groupId, createdAt) VALUES ($1, $2, $3, $4, $5)',
+          'INSERT INTO results (id, quiz_id, answers, quiz_group_id, created_at) VALUES ($1, $2, $3, $4, $5)',
           [
             currentAnswer.id,
-            currentAnswer.questionId,
-            currentAnswer.questionId,
-            currentAnswer.groupId,
-            currentAnswer.createdAt,
+            currentAnswer.quiz_id,
+            currentAnswer.answers,
+            currentAnswer.quiz_group_id,
+            currentAnswer.created_at,
           ]
         );
       }
       return true;
     } catch (error) {
+      console.log('Fail to answer to quiz' + error);
       console.log(error);
       return false;
     }
   };
 
-  static getQuizResult = async (quizID: string): Promise<IResponse[]> => {
+  static getQuizResult = async (
+    quizID: string
+  ): Promise<IResponse[] | undefined> => {
     try {
       const result = await dbPool.query(
-        'SELECT * FROM answers WHERE groupId = $1',
+        'SELECT * FROM results WHERE quiz_group_id = $1',
         [quizID]
+      );
+      console.log(
+        `result retrieve successfully with data: ${result.rows} ${quizID}`
       );
       return result.rows;
     } catch (error) {
+      console.log(
+        `Fail to get result of quiz_group id ${quizID} with error ${error}`
+      );
       console.log(error);
-      return [];
+      return;
+    }
+  };
+
+  static getAnswersByQuizId = async (
+    quizID: string
+  ): Promise<IResponse[] | undefined> => {
+    try {
+      const result = await dbPool.query(
+        'SELECT * FROM answers WHERE quiz_id = $1',
+        [quizID]
+      );
+      console.log(
+        `result retrieve successfully with data: ${result.rows} ${quizID}`
+      );
+      return result.rows;
+    } catch (error) {
+      console.log(
+        `Fail to get result of quiz id ${quizID} with error ${error}`
+      );
+      console.log(error);
+      return;
     }
   };
 }
